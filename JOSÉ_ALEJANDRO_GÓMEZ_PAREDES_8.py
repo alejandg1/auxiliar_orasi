@@ -6,21 +6,12 @@ nowDir = os.getcwd()
 # directorio del usuario
 user_dir = os.path.expanduser("~")
 # funciones
-# TODO quiza tambien borre esto
-# directorio raiz del sistema
-# rootDir = os.path.abspath("/")
-# TODO borrar pq no lo usa el programa----     directorio de documentos según el lenguaje del sistema
-""" documentos_path = ""
-sys_lang = locale.setlocale(0)
-if ("es" in sys_lang):
-    documentos_path = os.path.join(os.path.expanduser("~"), "Documentos/")
-elif ("en" in sys_lang):
-    documentos_path = os.path.join(os.path.expanduser("~"), "Documents/")
-else: """
-"""     print(f"Idioma no soportado {sys_lang}")
-print(documentos_path)
 
- """
+# borra contenido de la terminal
+
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def copyfiles():
@@ -38,6 +29,7 @@ def copyfiles():
                 if os.path.isfile(file_path):
                     # copiar archivos
                     shutil.copy(file_path, dirdestino)
+                    print("archivos copiados")
         else:
             if (os.path.exists(dirdestino)):
                 # copia archivos o directorio completo ingresado
@@ -84,54 +76,44 @@ def searchfiles():
         print("ruta no encontrada")
 
 
-# rutas de subcarpetas
-music_path = os.getcwd()+"/music/"
-documents_path = os.getcwd()+"/documents/"
-images_path = os.getcwd()+"/images/"
-
-
 def orgfiles():
     # arreglos para especificar las extenciones o formatos de cata tipo de archivo
-    music_format = []
-    document_format = []
-    image_format = []
+    music_format = ['.mp3', '.wav', '.flac', '.aac', '.ogg']
+    document_format = ['.pdf', '.docx', '.xlsx', '.pptx', '.txt']
+    image_format = ['.jpg', '.png', '.gif', '.bmp', '.svg']
     ruta = input("ingrese la ruta en la que desea ordenar archivos>>  ")
     if os.path.exists(ruta):
+        music_path = ruta+"/musica/"
+        documents_path = ruta+"/documentos/"
+        images_path = ruta+"/imagenes/"
         print("organizando archivos")
         # obtiene los archivos que se encuentran dentro de una ruta ingresada
-        archivos = [arch.name for arch in os.scandir(ruta) if arch.is_file()]
+        archivos = [arch.name for arch in os.scandir(
+            ruta) if arch.is_file()]
         # comprobar existencia de las carpetas
-        #! moviendo archivos de musica
-        if (os.path.exists(music_path)):
-            for archivo in archivos:
-                # comprobar si la extensión del archivo está en el arreglo
-                nombre, ext = os.path.splitext(archivo)
-                if ext in music_format:
-                    shutil.move(os.path.join(
-                        ruta, archivo), music_path)
-        else:
+        if (not (os.path.exists(music_path))):
             # crear carpeta musica en el directorio ingresado
             os.mkdir(music_path)
-        #! moviendo archivos de documentos
-        if (os.path.exists(documents_path)):
-            for archivo in archivos:
-                # comprobar si la extensión del archivo está en el arreglo
-                nombre, ext = os.path.splitext(archivo)
-                if ext in document_format:
-                    shutil.move(os.path.join(
-                        ruta, archivo), documents_path)
-        else:
+        if (not (os.path.exists(documents_path))):
+            # crear carpeta musica en el directorio ingresado
             os.mkdir(documents_path)
-        #! moviendo archivos de imagenes
-        if (os.path.exists(images_path)):
-            for archivo in archivos:
-                # comprobar si la extensión del archivo está en el arreglo
-                nombre, ext = os.path.splitext(archivo)
-                if ext in image_format:
-                    shutil.move(os.path.join(
-                        ruta, archivo), images_path)
-        else:
+        if (not (os.path.exists(images_path))):
+            # crear carpeta musica en el directorio ingresado
             os.mkdir(images_path)
+        #! moviendo archivos de imagenes
+        for archivo in archivos:
+            # comprobar si la extensión del archivo está en el arreglo
+            nombre, ext = os.path.splitext(archivo)
+            # ? moviendo archivos a sus respectivas carpetas
+            if ext in image_format:
+                shutil.move(os.path.join(
+                    ruta, archivo), images_path)
+            if ext in document_format:
+                shutil.move(os.path.join(
+                    ruta, archivo), documents_path)
+            if ext in music_format:
+                shutil.move(os.path.join(
+                    ruta, archivo), music_path)
         print("-----------------------------")
         print("archivos organizados")
     else:
@@ -139,22 +121,31 @@ def orgfiles():
 
 
 def menu():
-    opcion = "1"
-    while opcion != "0":
-        print("""1) copiar archivos de un directorio a otro
-                 2) busqueda de archivos
-                 3) organizar archivos de musica, imagenes y documentos """)
-        opcion = input("ingrese el número de la acción que desea realizar>> ")
-        if opcion == "1":
-            copyfiles()
-        elif (opcion == "2"):
-            searchfiles()
-        elif (opcion == "3"):
-            orgfiles()
-        elif (opcion == "0"):
-            break
-        else:
-            print("opción no valida ")
+    try:
+        opcion = "1"
+        while opcion != "0":
+            print("""
+                    1) copiar archivos de un directorio a otro
+                    2) busqueda de archivos
+                    3) organizar archivos de musica, imagenes y documentos """)
+            opcion = input(
+                "ingrese el número de la acción que desea realizar>> ")
+            if opcion == "1":
+                clear()
+                copyfiles()
+            elif (opcion == "2"):
+                clear()
+                searchfiles()
+            elif (opcion == "3"):
+                clear()
+                orgfiles()
+            elif (opcion == "0"):
+                clear()
+                break
+            else:
+                print("opción no valida ")
+    except:
+        print("error del sistema")
 
 
 menu()
