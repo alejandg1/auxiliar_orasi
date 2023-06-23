@@ -83,6 +83,7 @@ def orgfiles():
     image_format = ['.jpg', '.png', '.gif', '.bmp', '.svg']
     ruta = input("ingrese la ruta en la que desea ordenar archivos>>  ")
     if os.path.exists(ruta):
+        # definir rutas de las carpetas dentro del directorio ingresado por usuario
         music_path = ruta+"/musica/"
         documents_path = ruta+"/documentos/"
         images_path = ruta+"/imagenes/"
@@ -122,12 +123,13 @@ def orgfiles():
 
 def menu():
     try:
-        opcion = "1"
-        while opcion != "0":
+        while True:
             print("""
                     1) copiar archivos de un directorio a otro
                     2) busqueda de archivos
-                    3) organizar archivos de musica, imagenes y documentos """)
+                    3) organizar archivos de musica, imagenes y documentos 
+                    0) terminar ejecución
+                    """)
             opcion = input(
                 "ingrese el número de la acción que desea realizar>> ")
             if opcion == "1":
